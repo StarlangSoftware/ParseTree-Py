@@ -1,4 +1,5 @@
 from ParseTree.NodeCondition.NodeCondition import NodeCondition
+from ParseTree.ParseNode import ParseNode
 
 
 class IsEnglishLeaf(NodeCondition):

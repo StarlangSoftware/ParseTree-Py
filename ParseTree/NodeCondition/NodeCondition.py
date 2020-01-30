@@ -1,5 +1,7 @@
 from abc import abstractmethod
 
+from ParseTree.ParseNode import ParseNode
+
 
 class NodeCondition:
 
