@@ -135,7 +135,7 @@ class ParseNode:
     ParseNode
         Head node of the descendant leaves of this current node.
     """
-    def heafLeaf(self) -> ParseNode:
+    def headLeaf(self) -> ParseNode:
         if len(self.children) > 0:
             head = self.headChild()
             if head is not None:
@@ -227,3 +227,166 @@ class ParseNode:
                                 else:
                                     return self.lastChild()
         return None
+
+    """
+    Adds a child node at the end of the children node list.
+
+    PARAMETERS
+    ----------
+    child : ParseNode
+        Child node to be added.
+    """
+    def addChild(self, child: ParseNode, index=None):
+        if index is None:
+            self.children.append(child)
+        else:
+            self.children.insert(index, child)
+        child.parent = self
+
+    """
+    Recursive method to restore the parents of all nodes below this node in the hierarchy.
+    """
+    def correctParents(self):
+        for child in self.children:
+            child.parent = self
+            child.correctParents()
+
+    """
+    Recursive method to remove all nodes starting with the symbol X. If the node is removed, its children are
+    connected to the next sibling of the deleted node.
+    """
+    def removeXNodes(self):
+        i = 0
+        while i < len(self.children):
+            if self.children[i].getData().getName().startswith("X"):
+                self.children.insert(i + 1, self.children[i].children)
+                self.children.pop(i)
+            else:
+                i = i + 1
+        for child in self.children:
+            child.removeXNodes()
+
+    """
+    Replaces a child node at the given specific with a new child node.
+
+    PARAMETERS
+    ----------
+    index : int
+        Index where the new child node replaces the old one.
+    child : ParseNode
+        Child node to be replaced.
+    """
+    def setChild(self, index: int, child: ParseNode):
+        self.children[index] = child
+
+    """
+    Removes a given child from children node list.
+
+    PARAMETERS
+    ----------
+    child : ParseNode
+        Child node to be deleted.
+    """
+    def removeChild(self, child: ParseNode):
+        self.children.remove(child)
+
+    """
+    Recursive method to calculate the number of all leaf nodes in the subtree rooted with this current node.
+
+    RETURNS
+    -------
+    int
+        Number of all leaf nodes in the current subtree.
+    """
+    def leafCount(self) -> int:
+        if len(self.children) == 0:
+            return 1
+        else:
+            total = 0
+            for child in self.children:
+                total += child.leafCount()
+            return total
+
+    """
+    Recursive method to calculate the number of all nodes in the subtree rooted with this current node.
+
+    RETURNS
+    -------
+    int
+        Number of all nodes in the current subtree.
+    """
+    def nodeCount(self) -> int:
+        if len(self.children) > 0:
+            total = 1
+            for child in self.children:
+                total += child.nodeCount()
+            return total
+        else:
+            return 1
+
+    """
+    Recursive method to calculate the number of all nodes, which have more than one children, in the subtree rooted
+    with this current node.
+
+    RETURNS
+    -------
+    int
+        Number of all nodes, which have more than one children, in the current subtree.
+    """
+    def nodeCountWithMultipleChildren(self) -> int:
+        if len(self.children) > 1:
+            total = 1
+            for child in self.children:
+                total += child.nodeCountWithMultipleChildren()
+            return total
+        else:
+            return 0
+
+    """
+    Returns number of children of this node.
+
+    RETURNS
+    -------
+    int
+        Number of children of this node.
+    """
+    def numberOfChildren(self) -> int:
+        return len(self.children)
+
+    """
+    Returns the i'th child of this node.
+
+    PARAMETERS
+    ----------
+    i : int
+        Index of the retrieved node.
+        
+    RETURNS
+    -------
+    ParseNode
+        i'th child of this node.
+    """
+    def getChild(self, i: int) -> ParseNode:
+        return self.children[i]
+
+    """
+    Returns the first child of this node.
+
+    RETURNS
+    -------
+    ParseNode
+        First child of this node.
+    """
+    def firstChild(self) -> ParseNode:
+        return self.children[0]
+
+    """
+    Returns the last child of this node.
+
+    RETURNS
+    -------
+    ParseNode
+        Last child of this node.
+    """
+    def lastChild(self) -> ParseNode:
+        return self.children[len(self.children) - 1]
