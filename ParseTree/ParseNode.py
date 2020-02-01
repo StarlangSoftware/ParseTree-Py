@@ -5,18 +5,19 @@ from ParseTree.Symbol import Symbol
 
 
 class ParseNode:
-
     children: list
     parent: ParseNode
     data: Symbol
 
-    ADJP = ["NNS", "QP", "NN", "$", "ADVP", "JJ", "VBN", "VBG", "ADJP", "JJR", "NP", "JJS", "DT", "FW", "RBR", "RBS", "SBAR", "RB"]
+    ADJP = ["NNS", "QP", "NN", "$", "ADVP", "JJ", "VBN", "VBG", "ADJP", "JJR", "NP", "JJS", "DT", "FW", "RBR", "RBS",
+            "SBAR", "RB"]
     ADVP = ["RB", "RBR", "RBS", "FW", "ADVP", "TO", "CD", "JJR", "JJ", "IN", "NP", "JJS", "NN"]
     CONJP = ["CC", "RB", "IN"]
     FRAG = []
     INTJ = []
     LST = ["LS", ":"]
-    NAC = ["NN", "NNS", "NNP", "NNPS", "NP", "NAC", "EX", "$", "CD", "QP", "PRP", "VBG", "JJ", "JJS", "JJR", "ADJP", "FW"]
+    NAC = ["NN", "NNS", "NNP", "NNPS", "NP", "NAC", "EX", "$", "CD", "QP", "PRP", "VBG", "JJ", "JJS", "JJR", "ADJP",
+           "FW"]
     PP = ["IN", "TO", "VBG", "VBN", "RP", "FW"]
     PRN = []
     PRT = ["RP"]
@@ -52,8 +53,11 @@ class ParseNode:
     right : ParseNode
         Right child of this node.
     """
-    def __init__(self, dataOrParent, leftOrLine = None, rightOrIsLeaf = None):
+
+    def __init__(self, dataOrParent, leftOrLine=None, rightOrIsLeaf=None):
         self.children = []
+        self.parent = None
+        self.data = None
         if isinstance(dataOrParent, Symbol) and isinstance(leftOrLine, ParseNode) and isinstance(rightOrIsLeaf,
                                                                                                  ParseNode):
             self.data = dataOrParent
@@ -107,6 +111,7 @@ class ParseNode:
     ParseNode
         Head node of the children of the current node
     """
+
     def searchHeadChild(self, priorityList: list, direction: SearchDirectionType, defaultCase: bool) -> ParseNode:
         if direction == SearchDirectionType.LEFT:
             for item in priorityList:
@@ -135,6 +140,7 @@ class ParseNode:
     ParseNode
         Head node of the descendant leaves of this current node.
     """
+
     def headLeaf(self) -> ParseNode:
         if len(self.children) > 0:
             head = self.headChild()
@@ -154,6 +160,7 @@ class ParseNode:
     ParseNode
         Head node among its children of this current node.
     """
+
     def headChild(self) -> ParseNode:
         if self.data.trimSymbol().__str__() == "ADJP":
             return self.searchHeadChild(self.ADJP, SearchDirectionType.LEFT, True)
@@ -228,7 +235,11 @@ class ParseNode:
                                     return self.lastChild()
         return None
 
+    def constructUniversalDependencies(self, dependencies: map):
+        pass
+
     """
+    
     Adds a child node at the end of the children node list.
 
     PARAMETERS
@@ -236,6 +247,7 @@ class ParseNode:
     child : ParseNode
         Child node to be added.
     """
+
     def addChild(self, child: ParseNode, index=None):
         if index is None:
             self.children.append(child)
@@ -246,6 +258,7 @@ class ParseNode:
     """
     Recursive method to restore the parents of all nodes below this node in the hierarchy.
     """
+
     def correctParents(self):
         for child in self.children:
             child.parent = self
@@ -255,6 +268,7 @@ class ParseNode:
     Recursive method to remove all nodes starting with the symbol X. If the node is removed, its children are
     connected to the next sibling of the deleted node.
     """
+
     def removeXNodes(self):
         i = 0
         while i < len(self.children):
@@ -276,6 +290,7 @@ class ParseNode:
     child : ParseNode
         Child node to be replaced.
     """
+
     def setChild(self, index: int, child: ParseNode):
         self.children[index] = child
 
@@ -287,6 +302,7 @@ class ParseNode:
     child : ParseNode
         Child node to be deleted.
     """
+
     def removeChild(self, child: ParseNode):
         self.children.remove(child)
 
@@ -298,6 +314,7 @@ class ParseNode:
     int
         Number of all leaf nodes in the current subtree.
     """
+
     def leafCount(self) -> int:
         if len(self.children) == 0:
             return 1
@@ -315,6 +332,7 @@ class ParseNode:
     int
         Number of all nodes in the current subtree.
     """
+
     def nodeCount(self) -> int:
         if len(self.children) > 0:
             total = 1
@@ -333,6 +351,7 @@ class ParseNode:
     int
         Number of all nodes, which have more than one children, in the current subtree.
     """
+
     def nodeCountWithMultipleChildren(self) -> int:
         if len(self.children) > 1:
             total = 1
@@ -350,6 +369,7 @@ class ParseNode:
     int
         Number of children of this node.
     """
+
     def numberOfChildren(self) -> int:
         return len(self.children)
 
@@ -366,6 +386,7 @@ class ParseNode:
     ParseNode
         i'th child of this node.
     """
+
     def getChild(self, i: int) -> ParseNode:
         return self.children[i]
 
@@ -377,6 +398,7 @@ class ParseNode:
     ParseNode
         First child of this node.
     """
+
     def firstChild(self) -> ParseNode:
         return self.children[0]
 
@@ -388,5 +410,269 @@ class ParseNode:
     ParseNode
         Last child of this node.
     """
+
     def lastChild(self) -> ParseNode:
         return self.children[len(self.children) - 1]
+
+    """
+    Checks if the given node is the last child of this node.
+
+    PARAMETERS
+    ----------
+    child : ParseNode
+        To be checked node.
+        
+    RETURNS
+    -------
+    bool
+        True, if child is the last child of this node, false otherwise.
+    """
+
+    def isLastChild(self, child: ParseNode) -> bool:
+        return self.children[len(self.children) - 1] == child
+
+    """
+    Returns the index of the given child of this node.
+
+    RETURNS
+    -------
+    int
+        Index of the child of this node.
+    """
+
+    def getChildIndex(self, child: ParseNode) -> int:
+        return self.children.index(child)
+
+    """
+    Returns true if the given node is a descendant of this node.
+
+    RETURNS
+    -------
+    bool
+        True if the given node is descendant of this node.
+    """
+
+    def isDescendant(self, node: ParseNode) -> bool:
+        for child in self.children:
+            if child == node:
+                return True
+            elif child.isDescendant(node):
+                return True
+        return False
+
+    """
+    Returns the previous sibling (sister) of this node.
+
+    RETURNS
+    -------
+    ParseNode
+        If this is the first child of its parent, returns null. Otherwise, returns the previous sibling of this node.
+    """
+
+    def previousSibling(self) -> ParseNode:
+        for i in range(1, len(self.parent.children)):
+            if self.parent.children[i] == self:
+                return self.parent.children[i - 1]
+        return None
+
+    """
+    Returns the next sibling (sister) of this node.
+
+    RETURNS
+    -------
+    ParseNode
+        If this is the last child of its parent, returns null. Otherwise, returns the next sibling of this node.
+    """
+
+    def nextSibling(self) -> ParseNode:
+        for i in range(0, len(self.parent.children) - 1):
+            if self.parent.children[i] == self:
+                return self.parent.children[i + 1]
+        return None
+
+    """
+    Accessor for the parent attribute.
+
+    RETURNS
+    -------
+    ParseNode
+        Parent of this node.
+    """
+
+    def getParent(self) -> ParseNode:
+        return self.parent
+
+    """
+    Accessor for the data attribute.
+
+    RETURNS
+    -------
+    Symbol
+        Data of this node.
+    """
+
+    def getData(self) -> Symbol:
+        return self.data
+
+    """
+    Mutator of the data attribute.
+
+    PARAMETERS
+    ----------
+    data : Symbol
+        Data to be set.
+    """
+
+    def setData(self, data: Symbol):
+        self.data = data
+
+    """
+    Recursive function to count the number of words in the subtree rooted at this node.
+
+    PARAMETERS
+    ----------
+    excludeStopWords : bool
+        If true, stop words are not counted.
+        
+    RETURNS
+    -------
+    int
+        Number of words in the subtree rooted at this node.
+    """
+
+    def wordCount(self, excludeStopWords: bool) -> int:
+        if len(self.children) == 0:
+            if not excludeStopWords:
+                total = 1
+            else:
+                if self.data.getName() == "," or self.data.getName() == "." or self.data.getName() == ";" or \
+                        "*" in self.data.getName() or self.data.getName() == "at" or self.data.getName() == "the" or \
+                        self.data.getName() == "to" or self.data.getName() == "a" or self.data.getName() == "an" or \
+                        self.data.getName() == "not" or self.data.getName() == "is" or self.data.getName() == "was" or \
+                        self.data.getName() == "were" or self.data.getName() == "have" or \
+                        self.data.getName() == "had" or self.data.getName() == "has" or self.data.getName() == "!" or \
+                        self.data.getName() == "?" or self.data.getName() == "by" or self.data.getName() == "at" or \
+                        self.data.getName() == "on" or self.data.getName() == "off" or self.data.getName() == "'s" or \
+                        self.data.getName() == "n't" or self.data.getName() == "can" or \
+                        self.data.getName() == "could" or self.data.getName() == "may" or \
+                        self.data.getName() == "might" or self.data.getName() == "will" or \
+                        self.data.getName() == "would" or self.data.getName() == "''" or self.data.getName() == "'" or \
+                        self.data.getName() == "\"" or self.data.getName() == "\"\"" or self.data.getName() == "as" or \
+                        self.data.getName() == "with" or self.data.getName() == "for" or \
+                        self.data.getName() == "will" or self.data.getName() == "would" or \
+                        self.data.getName() == "than" or self.data.getName() == "``" or self.data.getName() == "$" or \
+                        self.data.getName() == "and" or self.data.getName() == "or" or self.data.getName() == "of" or \
+                        self.data.getName() == "are" or self.data.getName() == "be" or \
+                        self.data.getName() == "been" or self.data.getName() == "do" or self.data.getName() == "few" or \
+                        self.data.getName() == "there" or self.data.getName() == "up" or self.data.getName() == "down":
+                    total = 0
+                else:
+                    total = 1
+        else:
+            total = 0
+        for child in self.children:
+            total += child.wordCount(excludeStopWords)
+        return total
+
+    """
+    Returns True if this node is leaf, False otherwise.
+
+    RETURNS
+    -------
+    bool
+        True if this node is leaf, False otherwise.
+    """
+
+    def isLeaf(self) -> bool:
+        return len(self.children) == 0
+
+    """
+    Returns True if this node does not contain a meaningful data, False otherwise.
+
+    RETURNS
+    -------
+    bool
+        True if this node does not contain a meaningful data, False otherwise.
+    """
+
+    def isDummyNode(self) -> bool:
+        return "*" in self.getData().getName() or (self.getData().getName() == "0" and
+                                                   self.parent.getData().getName() == "-NONE-")
+
+    """
+    Recursive function to convert the subtree rooted at this node to a string.
+
+    RETURNS
+    -------
+    str
+        A string which contains all words in the subtree rooted at this node.
+    """
+
+    def __str__(self) -> str:
+        if len(self.children) < 2:
+            if len(self.children) < 1:
+                return self.getData().getName()
+            else:
+                return "(" + self.data.getName() + " " + self.firstChild().__str__() + ")"
+        else:
+            st = "(" + self.data.getName()
+            for child in self.children:
+                st += child.__str__()
+            return st + ")"
+
+    """
+    Swaps the given child node of this node with the previous sibling of that given node. If the given node is the
+    leftmost child, it swaps with the last node.
+
+    PARAMETERS
+    ----------
+    node : ParseNode
+        Node to be swapped.
+    """
+
+    def moveLeft(self, node: ParseNode):
+        for i in range(len(self.children)):
+            if self.children[i] == node:
+                if i == 0:
+                    self.children[0], self.children[len(self.children) - 1] = \
+                        self.children[len(self.children) - 1], self.children[0]
+                else:
+                    self.children[i], self.children[(i - 1) % len(self.children)] = \
+                        self.children[(i - 1) % len(self.children)], self.children[i]
+                return
+        for child in self.children:
+            child.moveLeft()
+
+    """
+    Swaps the given child node of this node with the next sibling of that given node. If the given node is the
+    rightmost child, it swaps with the first node.
+
+    PARAMETERS
+    ----------
+    node : ParseNode
+        Node to be swapped.
+    """
+
+    def moveRight(self, node: ParseNode):
+        for i in range(len(self.children)):
+            if self.children[i] == node:
+                self.children[i], self.children[(i + 1) % len(self.children)] = \
+                    self.children[(i + 1) % len(self.children)], self.children[i]
+                return
+        for child in self.children:
+            child.moveRight()
+
+    """
+    Recursive function to concatenate the data of the all ascendant nodes of this node to a string.
+
+    RETURNS
+    -------
+    str
+        A string which contains all data of all the ascendant nodes of this node.
+    """
+
+    def ancestorString(self) -> str:
+        if self.parent is None:
+            return self.data.getName()
+        else:
+            return self.parent.ancestorString() + self.data.getName()
