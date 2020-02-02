@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name='ParseTree',
+    name='NlpToolkit-ParseTree',
     version='1.0.0',
     packages=['ParseTree', 'ParseTree.NodeCondition'],
     url='https://github.com/olcaytaner/ParseTree-Py',
