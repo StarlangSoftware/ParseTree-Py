@@ -8,15 +8,15 @@ class ParseTree:
     sentenceLabels = ["SINV", "SBARQ", "SBAR", "SQ", "S"]
     root: ParseNode
 
-    """
-    Basic constructor for a ParseTree. Initializes the root node with the input.
-
-    PARAMETERS
-    ----------
-    root : ParseNode
-        Root node of the tree
-    """
     def __init__(self, rootOrFileName=None):
+        """
+        Basic constructor for a ParseTree. Initializes the root node with the input.
+
+        PARAMETERS
+        ----------
+        rootOrFileName : ParseNode
+            Root node of the tree
+        """
         if isinstance(rootOrFileName, ParseNode):
             self.root = rootOrFileName
         elif isinstance(rootOrFileName, str):
@@ -29,20 +29,20 @@ class ParseTree:
                 self.root = None
             inputFile.close()
 
-    """
-    Gets the next leaf node after the given leaf node in the ParseTree.
-
-    PARAMETERS
-    ----------
-    parseNode : ParseNode
-        ParseNode for which next node is calculated.
-        
-    RETURNS
-    -------
-    ParseNode
-        Next leaf node after the given leaf node.
-    """
     def nextLeafNode(self, parseNode: ParseNode) -> ParseNode:
+        """
+        Gets the next leaf node after the given leaf node in the ParseTree.
+
+        PARAMETERS
+        ----------
+        parseNode : ParseNode
+            ParseNode for which next node is calculated.
+
+        RETURNS
+        -------
+        ParseNode
+            Next leaf node after the given leaf node.
+        """
         nodeCollector = NodeCollector(self.root, IsEnglishLeaf())
         leafList = nodeCollector.collect()
         for i in range(len(leafList) - 1):

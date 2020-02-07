@@ -563,7 +563,7 @@ class ParseNode:
                         self.data.getName() == "than" or self.data.getName() == "``" or self.data.getName() == "$" or \
                         self.data.getName() == "and" or self.data.getName() == "or" or self.data.getName() == "of" or \
                         self.data.getName() == "are" or self.data.getName() == "be" or \
-                        self.data.getName() == "been" or self.data.getName() == "do" or self.data.getName() == "few" or \
+                        self.data.getName() == "been" or self.data.getName() == "do" or self.data.getName() == "few" or\
                         self.data.getName() == "there" or self.data.getName() == "up" or self.data.getName() == "down":
                     total = 0
                 else:
