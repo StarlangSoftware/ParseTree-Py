@@ -20,41 +20,38 @@ class Symbol(Word):
     def __eq__(self, other):
         return self.name == other.name
 
-    """
-    Constructor for Symbol class. Sets the name attribute.
-
-    PARAMETERS
-    ----------
-    name : str
-        Name attribute
-    """
-
     def __init__(self, name: str):
+        """
+        Constructor for Symbol class. Sets the name attribute.
+
+        PARAMETERS
+        ----------
+        name : str
+            Name attribute
+        """
         super().__init__(name)
 
-    """
-    Checks if the symbol is VP or not.
-    
-    RETURNS
-    -------
-    bool
-        True if the symbol is VB, false otherwise.
-    """
-
     def isVP(self) -> bool:
+        """
+        Checks if the symbol is VP or not.
+
+        RETURNS
+        -------
+        bool
+            True if the symbol is VB, false otherwise.
+        """
         return self.name == self.VPLabel
 
-    """
-    Checks if this symbol is a terminal symbol or not. A symbol is terminal if it is a punctuation symbol, or
-    if it starts with a lowercase symbol.
-
-    RETURNS
-    -------
-    bool
-        True if this symbol is a terminal symbol, false otherwise.
-    """
-
     def isTerminal(self) -> bool:
+        """
+        Checks if this symbol is a terminal symbol or not. A symbol is terminal if it is a punctuation symbol, or
+        if it starts with a lowercase symbol.
+
+        RETURNS
+        -------
+        bool
+            True if this symbol is a terminal symbol, false otherwise.
+        """
         if self.name == "," or self.name == "." or self.name == "!" or self.name == "?" or self.name == ":" \
                 or self.name == ";" or self.name == "\"" or self.name == "''" or self.name == "'" or self.name == "`" \
                 or self.name == "``" or self.name == "..." or self.name == "-" or self.name == "--":
@@ -68,31 +65,30 @@ class Symbol(Word):
                 return True
         return False
 
-    """
-    Checks if this symbol can be a chunk label or not.
-
-    RETURNS
-    -------
-    bool
-        True if this symbol can be a chunk label, false otherwise.
-    """
-
     def isChunkLabel(self) -> bool:
+        """
+        Checks if this symbol can be a chunk label or not.
+
+        RETURNS
+        -------
+        bool
+            True if this symbol can be a chunk label, false otherwise.
+        """
         if Word.isPunctuationSymbol(self.name) or self.name.replace("-.*", "") in self.sentenceLabels or \
                 self.name.replace("-.*", "") in self.phraseLabels:
             return True
         return False
 
-    """
-    If the symbol's data contains '-' or '=', this method trims all characters after those characters and returns
-    the resulting string.
-
-    RETURNS
-    -------
-    Symbol
-        Trimmed symbol.
-    """
     def trimSymbol(self) -> Symbol:
+        """
+        If the symbol's data contains '-' or '=', this method trims all characters after those characters and returns
+        the resulting string.
+
+        RETURNS
+        -------
+        Symbol
+            Trimmed symbol.
+        """
         if self.name.startswith("-") or ("-" not in self.name and "=" not in self.name):
             return self
         minusIndex = self.name.index("-")
