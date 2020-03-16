@@ -58,35 +58,26 @@ Detailed Description
 
 Kaydedilmiş ParseTreelerden oluşan bir TreeBank'ı belirli bir klasörden yüklemek için
 
-	TreeBank(File folder)
+	TreeBank(self, folder: str = None)
 
 bir klasördeki ağaçlardan ismi belirli bir örüntüye sahip ağaçları yüklemek için
 
-	TreeBank(File folder, String pattern)
-	
-bir klasördeki ağaçlardan ismi belirli bir örüntüye sahip ve numaraları da belirli bir aralıkta olanları yüklemek için ise
-
-	TreeBank(File folder, String pattern, int from, int to)
-	
+	TreeBank(self, folder: str = None, pattern: str = None)
+		
 kullanılır. Örneğin
 
-	a = TreeBank(new File("/mypath"));
+	a = TreeBank("/mypath");
 
-o anda bulunan klasörün altındaki "mypath" klasörünün altındaki ağaçları yüklemek için kullanılır. Aynı klasörün altındaki sadece "train" uzantılı ağaçlar yüklenecekse, 
+o anda bulunan klasörün altındaki "mypath" klasörünün altındaki ağaçları yüklemek için kullanılır. Aynı klasörün altındaki sadece "train" uzantılı ağaçlar yüklenecekse de, 
 
-	a = TreeBank(new File("/mypath"), ".train");
-
-bu ağaçlardan sadece 1 ile 500 arasındaki ağaçlar yüklenecekse de
-
-	a = TreeBank(new File("/mypath"), ".train", 1, 500);
+	a = TreeBank("/mypath", ".train");
 
 kullanılır.
 
 TreeBank yüklendikten sonra ağaçlar üstünde gezmek için ise,
 
-	for (int i = 0; i < a.size(); i++){
-		ParseTree p = a.get(i);
-	}
+	for i in range(a.size()):
+		p = a.get(i);
 	
 gibi bir kod kullanılabilir.
 
@@ -94,20 +85,20 @@ gibi bir kod kullanılabilir.
 
 Kaydedilmiş bir ParseTree'yi yüklemek için
 
-	ParseTree(FileInputStream file)
+	ParseTree(fileName: str)
 	
 kullanılır. Genel olarak tek tek ParseTree yüklemek yerine yukarıda anlatıldığı gibi bir TreeBank yüklemek daha mantıklıdır.
 
 Bir ParseTree'nin düğüm sayısını
 
-	int nodeCount()
+	nodeCount() -> int
 	
 yaprak sayısını 
 
-	int leafCount()
+	leafCount() -> int
 	
 içinde yer alan kelime sayısını da
 
-	int wordCount(boolean excludeStopWords)
+	wordCount(excludeStopWords: bool) -> int
 	
 metodları ile bulabiliriz.
