@@ -2,8 +2,9 @@
 
 For Developers
 ============
-You can also see either [Java](https://github.com/olcaytaner/ParseTree) 
-or [C++](https://github.com/olcaytaner/ParseTree-CPP) repository.
+
+You can also see [Java](https://github.com/starlangsoftware/ParseTree), [C++](https://github.com/starlangsoftware/ParseTree-CPP), or [C#](https://github.com/starlangsoftware/ParseTree-CS) repository.
+
 ## Requirements
 
 * [Python 3.7 or higher](#python)
