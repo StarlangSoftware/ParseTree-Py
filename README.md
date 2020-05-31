@@ -31,7 +31,7 @@ Use Git for cloning the code to your local or below line for Ubuntu:
 
 A directory called ParseTree will be created. Or you can use below link for exploring the code:
 
-	git clone https://github.com/olcaytaner/ParseTree-Py.git
+	git clone https://github.com/starlangsoftware/ParseTree-Py.git
 
 ## Open project with Pycharm IDE
 
@@ -42,13 +42,6 @@ Steps for opening the cloned project:
 * Choose `ParseTree-Py` file
 * Select open as project option
 * Couple of seconds, dependencies will be downloaded. 
-
-
-## Compile
-
-**From IDE**
-
-After being done with the downloading and Maven indexing, select **Build Project** option from **Build** menu. After compilation process, user can run ParseTree-Py.
 
 Detailed Description
 ============
