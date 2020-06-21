@@ -71,11 +71,6 @@ class ParseTree:
                 return leafList[i - 1]
         return None
 
-    def constructUniversalDependencies(self) -> map:
-        universalDependencies = {}
-        self.root.constructUniversalDependencies(universalDependencies)
-        return universalDependencies
-
     def nodeCountWithMultipleChildren(self) -> int:
         """
         Calls recursive method to calculate the number of all nodes, which have more than one children.

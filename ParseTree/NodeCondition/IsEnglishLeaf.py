@@ -1,8 +1,8 @@
-from ParseTree.NodeCondition.NodeCondition import NodeCondition
+from ParseTree.NodeCondition.IsLeaf import IsLeaf
 from ParseTree.ParseNode import ParseNode
 
 
-class IsEnglishLeaf(NodeCondition):
+class IsEnglishLeaf(IsLeaf):
 
     def satisfies(self, parseNode: ParseNode) -> bool:
         """
@@ -21,7 +21,7 @@ class IsEnglishLeaf(NodeCondition):
         if super().satisfies(parseNode):
             data = parseNode.getData().getName()
             parentData = parseNode.getParent().getData().getName()
-            if "+" in data or (data == "0" and parentData == "-NONE-"):
+            if "*" in data or (data == "0" and parentData == "-NONE-"):
                 return False
             return True
         return False

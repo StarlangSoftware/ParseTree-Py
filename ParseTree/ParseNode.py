@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from Dictionary.Word import Word
+
 from ParseTree.SearchDirectionType import SearchDirectionType
 from ParseTree.Symbol import Symbol
 
@@ -69,7 +71,7 @@ class ParseNode:
                 if leftOrLine is not None:
                     self.children.append(leftOrLine)
                     leftOrLine.parent = self
-        elif isinstance(dataOrParent, ParseNode) and isinstance(leftOrLine, str) and isinstance(rightOrIsLeaf, bool):
+        elif (isinstance(dataOrParent, ParseNode) or dataOrParent is None) and isinstance(leftOrLine, str) and isinstance(rightOrIsLeaf, bool):
             parenthesisCount = 0
             childLine = ""
             self.parent = dataOrParent
@@ -231,9 +233,6 @@ class ParseNode:
                                 else:
                                     return self.lastChild()
         return None
-
-    def constructUniversalDependencies(self, dependencies: map):
-        pass
 
     def addChild(self, child: ParseNode, index=None):
         """
@@ -523,26 +522,25 @@ class ParseNode:
             if not excludeStopWords:
                 total = 1
             else:
-                if self.data.getName() == "," or self.data.getName() == "." or self.data.getName() == ";" or \
-                        "*" in self.data.getName() or self.data.getName() == "at" or self.data.getName() == "the" or \
-                        self.data.getName() == "to" or self.data.getName() == "a" or self.data.getName() == "an" or \
-                        self.data.getName() == "not" or self.data.getName() == "is" or self.data.getName() == "was" or \
-                        self.data.getName() == "were" or self.data.getName() == "have" or \
-                        self.data.getName() == "had" or self.data.getName() == "has" or self.data.getName() == "!" or \
-                        self.data.getName() == "?" or self.data.getName() == "by" or self.data.getName() == "at" or \
-                        self.data.getName() == "on" or self.data.getName() == "off" or self.data.getName() == "'s" or \
-                        self.data.getName() == "n't" or self.data.getName() == "can" or \
-                        self.data.getName() == "could" or self.data.getName() == "may" or \
-                        self.data.getName() == "might" or self.data.getName() == "will" or \
-                        self.data.getName() == "would" or self.data.getName() == "''" or self.data.getName() == "'" or \
-                        self.data.getName() == "\"" or self.data.getName() == "\"\"" or self.data.getName() == "as" or \
-                        self.data.getName() == "with" or self.data.getName() == "for" or \
-                        self.data.getName() == "will" or self.data.getName() == "would" or \
-                        self.data.getName() == "than" or self.data.getName() == "``" or self.data.getName() == "$" or \
-                        self.data.getName() == "and" or self.data.getName() == "or" or self.data.getName() == "of" or \
-                        self.data.getName() == "are" or self.data.getName() == "be" or \
-                        self.data.getName() == "been" or self.data.getName() == "do" or self.data.getName() == "few" or\
-                        self.data.getName() == "there" or self.data.getName() == "up" or self.data.getName() == "down":
+                if Word.isPunctuationSymbol(self.data.getName()) or \
+                        "*" in self.data.getName().lower() or self.data.getName().lower() == "at" or self.data.getName().lower() == "the" or \
+                        self.data.getName().lower() == "to" or self.data.getName().lower() == "a" or self.data.getName().lower() == "an" or \
+                        self.data.getName().lower() == "not" or self.data.getName().lower() == "is" or self.data.getName().lower() == "was" or \
+                        self.data.getName().lower() == "were" or self.data.getName().lower() == "have" or \
+                        self.data.getName().lower() == "had" or self.data.getName().lower() == "has" or \
+                        self.data.getName().lower() == "by" or self.data.getName().lower() == "at" or self.data.getName().lower() == "'re" or \
+                        self.data.getName().lower() == "on" or self.data.getName().lower() == "off" or self.data.getName().lower() == "'s" or \
+                        self.data.getName().lower() == "n't" or self.data.getName().lower() == "can" or \
+                        self.data.getName().lower() == "could" or self.data.getName().lower() == "may" or \
+                        self.data.getName().lower() == "might" or self.data.getName().lower() == "will" or \
+                        self.data.getName().lower() == "would" or self.data.getName().lower() == "as" or\
+                        self.data.getName().lower() == "with" or self.data.getName().lower() == "for" or self.data.getName().lower() == "in" or\
+                        self.data.getName().lower() == "will" or self.data.getName().lower() == "would" or \
+                        self.data.getName().lower() == "than" or self.data.getName().lower() == "$" or \
+                        self.data.getName().lower() == "and" or self.data.getName().lower() == "or" or self.data.getName().lower() == "of" or \
+                        self.data.getName().lower() == "are" or self.data.getName().lower() == "be" or \
+                        self.data.getName().lower() == "been" or self.data.getName().lower() == "do" or self.data.getName().lower() == "few" or\
+                        self.data.getName().lower() == "there" or self.data.getName().lower() == "up" or self.data.getName().lower() == "down":
                     total = 0
                 else:
                     total = 1

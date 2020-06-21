@@ -91,8 +91,14 @@ class Symbol(Word):
         """
         if self.name.startswith("-") or ("-" not in self.name and "=" not in self.name):
             return self
-        minusIndex = self.name.index("-")
-        equalIndex = self.name.index("=")
+        if "-" in self.name:
+            minusIndex = self.name.index("-")
+        else:
+            minusIndex = -1
+        if "=" in self.name:
+            equalIndex = self.name.index("=")
+        else:
+            equalIndex = -1
         if minusIndex != -1 or equalIndex != -1:
             if minusIndex != -1 and equalIndex != -1:
                 if minusIndex < equalIndex:
