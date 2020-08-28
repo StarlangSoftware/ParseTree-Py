@@ -172,3 +172,16 @@ class ParseTree:
             Number of words in the tree.
         """
         return self.root.wordCount(excludeStopWords)
+
+    def constituentSpanList(self) -> list:
+        """
+        Generates a list of constituents in the parse tree and their spans.
+
+        RETURNS
+        -------
+        list
+            A list of constituents in the parse tree and their spans.
+        """
+        result = []
+        self.root.constituentSpanList(1, result)
+        return result

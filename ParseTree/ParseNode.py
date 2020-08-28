@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from Dictionary.Word import Word
 
+from ParseTree.ConstituentSpan import ConstituentSpan
 from ParseTree.SearchDirectionType import SearchDirectionType
 from ParseTree.Symbol import Symbol
 
@@ -646,3 +647,21 @@ class ParseNode:
             return self.data.getName()
         else:
             return self.parent.ancestorString() + self.data.getName()
+
+    def constituentSpanList(self, startIndex: int, constituentSpanList: list):
+        """
+        Construct recursively the constituent span list of a subtree rooted at this node.
+
+        PARAMETERS
+        ----------
+        startIndex : int
+            Start index of the leftmost leaf node of this subtree.
+        constituentSpanList: list
+            Returned span list.
+        """
+        if len(self.children) > 0:
+            constituentSpanList.append(ConstituentSpan(self.data, startIndex, startIndex + self.leafCount()))
+        total = 0
+        for parseNode in self.children:
+            parseNode.constituentSpanList(startIndex + total, constituentSpanList)
+            total = total + parseNode.leafCount()

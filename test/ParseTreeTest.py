@@ -1,6 +1,7 @@
 import unittest
 
 from ParseTree.ParseTree import ParseTree
+from ParseTree.Symbol import Symbol
 
 
 class ParseTreeTest(unittest.TestCase):
@@ -52,6 +53,28 @@ class ParseTreeTest(unittest.TestCase):
         self.assertEqual(6, self.parseTree3.wordCount(True))
         self.assertEqual(7, self.parseTree4.wordCount(True))
         self.assertEqual(2, self.parseTree5.wordCount(True))
+
+    def test_ConstituentSpan(self):
+        span = self.parseTree1.constituentSpanList()[6]
+        self.assertEqual(Symbol("PP-LOC"), span.getConstituent())
+        self.assertEqual(4, span.getStart())
+        self.assertEqual(9, span.getEnd())
+        span = self.parseTree2.constituentSpanList()[10]
+        self.assertEqual(Symbol("VB"), span.getConstituent())
+        self.assertEqual(7, span.getStart())
+        self.assertEqual(8, span.getEnd())
+        span = self.parseTree3.constituentSpanList()[0]
+        self.assertEqual(Symbol("S"), span.getConstituent())
+        self.assertEqual(1, span.getStart())
+        self.assertEqual(11, span.getEnd())
+        span = self.parseTree4.constituentSpanList()[5]
+        self.assertEqual(Symbol("ADVP"), span.getConstituent())
+        self.assertEqual(3, span.getStart())
+        self.assertEqual(4, span.getEnd())
+        span = self.parseTree5.constituentSpanList()[4]
+        self.assertEqual(Symbol("."), span.getConstituent())
+        self.assertEqual(4, span.getStart())
+        self.assertEqual(5, span.getEnd())
 
 
 if __name__ == '__main__':
