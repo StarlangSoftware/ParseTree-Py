@@ -614,7 +614,7 @@ class ParseNode:
                         self.children[(i - 1) % len(self.children)], self.children[i]
                 return
         for child in self.children:
-            child.moveLeft()
+            child.moveLeft(node)
 
     def moveRight(self, node: ParseNode):
         """
@@ -632,7 +632,7 @@ class ParseNode:
                     self.children[(i + 1) % len(self.children)], self.children[i]
                 return
         for child in self.children:
-            child.moveRight()
+            child.moveRight(node)
 
     def ancestorString(self) -> str:
         """
