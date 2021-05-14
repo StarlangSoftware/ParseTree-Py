@@ -33,6 +33,18 @@ class NodeCollectorTest(unittest.TestCase):
         nodeCollector1 = NodeCollector(self.parseTree5.getRoot(), IsLeaf())
         self.assertEqual(4, len(nodeCollector1.collect()))
 
+    def test_CollectNode(self):
+        nodeCollector1 = NodeCollector(self.parseTree1.getRoot(), None)
+        self.assertEqual(34, len(nodeCollector1.collect()))
+        nodeCollector1 = NodeCollector(self.parseTree2.getRoot(), None)
+        self.assertEqual(39, len(nodeCollector1.collect()))
+        nodeCollector1 = NodeCollector(self.parseTree3.getRoot(), None)
+        self.assertEqual(32, len(nodeCollector1.collect()))
+        nodeCollector1 = NodeCollector(self.parseTree4.getRoot(), None)
+        self.assertEqual(28, len(nodeCollector1.collect()))
+        nodeCollector1 = NodeCollector(self.parseTree5.getRoot(), None)
+        self.assertEqual(9, len(nodeCollector1.collect()))
+
     def test_CollectEnglish(self):
         nodeCollector1 = NodeCollector(self.parseTree1.getRoot(), IsEnglishLeaf())
         self.assertEqual(13, len(nodeCollector1.collect()))

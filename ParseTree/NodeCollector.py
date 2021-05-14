@@ -35,11 +35,10 @@ class NodeCollector:
         collected : list
             The list where the collected ParseNode's will be stored.
         """
-        if self.condition.satisfies(parseNode):
+        if self.condition is None or self.condition.satisfies(parseNode):
             collected.append(parseNode)
-        else:
-            for child in parseNode.children:
-                self.__collectNodes(child, collected)
+        for child in parseNode.children:
+            self.__collectNodes(child, collected)
 
     def collect(self) -> list:
         """
