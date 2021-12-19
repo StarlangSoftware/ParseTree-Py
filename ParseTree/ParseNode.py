@@ -628,7 +628,11 @@ class ParseNode:
         """
         for i in range(len(self.children)):
             if self.children[i] == node:
-                self.children[i], self.children[(i + 1) % len(self.children)] = \
+                if i == len(self.children) - 1:
+                    self.children[0], self.children[len(self.children) - 1] = \
+                        self.children[len(self.children) - 1], self.children[0]
+                else:
+                    self.children[i], self.children[(i + 1) % len(self.children)] = \
                     self.children[(i + 1) % len(self.children)], self.children[i]
                 return
         for child in self.children:
