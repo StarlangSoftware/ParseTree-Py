@@ -4,41 +4,41 @@ from ParseTree.TreeBank import TreeBank
 
 class ParallelTreeBank:
 
-    __fromTreeBank: TreeBank
-    __toTreeBank: TreeBank
+    fromTreeBank: TreeBank
+    toTreeBank: TreeBank
 
     def __init__(self, folder1: str, folder2: str, pattern: str = None):
-        self.__fromTreeBank = TreeBank(folder1, pattern)
-        self.__toTreeBank = TreeBank(folder2, pattern)
+        self.fromTreeBank = TreeBank(folder1, pattern)
+        self.toTreeBank = TreeBank(folder2, pattern)
         self.removeDifferentTrees()
 
     def removeDifferentTrees(self):
         i = 0
         j = 0
-        while i < self.__fromTreeBank.size() and j < self.__toTreeBank.size():
-            if self.__fromTreeBank.get(i).getName() < self.__toTreeBank.get(j).getName():
-                self.__fromTreeBank.removeTree(i)
-            elif self.__fromTreeBank.get(i).getName() > self.__toTreeBank.get(j).getName():
-                self.__toTreeBank.removeTree(j)
+        while i < self.fromTreeBank.size() and j < self.toTreeBank.size():
+            if self.fromTreeBank.get(i).getName() < self.toTreeBank.get(j).getName():
+                self.fromTreeBank.removeTree(i)
+            elif self.fromTreeBank.get(i).getName() > self.toTreeBank.get(j).getName():
+                self.toTreeBank.removeTree(j)
             else:
                 i = i + 1
                 j = j + 1
-        while i < self.__fromTreeBank.size():
-            self.__fromTreeBank.removeTree(i)
-        while j < self.__toTreeBank.size():
-            self.__toTreeBank.removeTree(j)
+        while i < self.fromTreeBank.size():
+            self.fromTreeBank.removeTree(i)
+        while j < self.toTreeBank.size():
+            self.toTreeBank.removeTree(j)
 
     def size(self) -> int:
-        return self.__fromTreeBank.size()
+        return self.fromTreeBank.size()
 
     def fromTree(self, index: int) -> ParseTree:
-        return self.__fromTreeBank.get(index)
+        return self.fromTreeBank.get(index)
 
     def toTree(self, index: int) -> ParseTree:
-        return self.__toTreeBank.get(index)
+        return self.toTreeBank.get(index)
 
     def fromTreeBank(self) -> TreeBank:
-        return self.__fromTreeBank
+        return self.fromTreeBank
 
     def toTreeBank(self) -> TreeBank:
-        return self.__toTreeBank
+        return self.toTreeBank
