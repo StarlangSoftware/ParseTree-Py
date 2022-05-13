@@ -1,3 +1,5 @@
+import os
+
 from ParseTree.NodeCollector import NodeCollector
 from ParseTree.NodeCondition.IsEnglishLeaf import IsEnglishLeaf
 from ParseTree.ParseNode import ParseNode
@@ -7,6 +9,7 @@ class ParseTree:
 
     sentenceLabels = ["SINV", "SBARQ", "SBAR", "SQ", "S"]
     root: ParseNode
+    name: str
 
     def __init__(self, rootOrFileName=None):
         """
@@ -20,6 +23,7 @@ class ParseTree:
         if isinstance(rootOrFileName, ParseNode):
             self.root = rootOrFileName
         elif isinstance(rootOrFileName, str):
+            self.name = os.path.split(rootOrFileName)[1]
             inputFile = open(rootOrFileName, "r", encoding="utf8")
             line = inputFile.readline()
             if "(" in line and ")" in line:
@@ -81,6 +85,12 @@ class ParseTree:
             Number of all nodes, which have more than one children.
         """
         return self.root.nodeCountWithMultipleChildren()
+
+    def setName(self, name: str):
+        self.name = name
+
+    def getName(self) -> str:
+        return self.name
 
     def nodeCount(self) -> int:
         """

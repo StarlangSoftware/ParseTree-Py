@@ -24,6 +24,7 @@ class TreeBank:
         self.parseTrees = []
         if str is not None:
             for root, dirs, files in os.walk(folder):
+                files.sort()
                 for file in files:
                     fileName = os.path.join(root, file)
                     if (pattern is None or pattern in fileName) and re.match("\\d+\\.", file):
@@ -76,3 +77,6 @@ class TreeBank:
             The ParseTree at the given index.
         """
         return self.parseTrees[index]
+
+    def removeTree(self, i):
+        self.parseTrees.pop(i)
