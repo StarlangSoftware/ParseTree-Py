@@ -6,7 +6,7 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 setup(
     name='NlpToolkit-ParseTree',
-    version='1.0.10',
+    version='1.0.11',
     packages=['ParseTree', 'ParseTree.NodeCondition'],
     url='https://github.com/StarlangSoftware/ParseTree-Py',
     license='',

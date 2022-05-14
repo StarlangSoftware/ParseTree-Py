@@ -22,7 +22,7 @@ class TreeBank:
             File pattern such as "." ".train" ".test".
         """
         self.parseTrees = []
-        if str is not None:
+        if folder is not None:
             for root, dirs, files in os.walk(folder):
                 files.sort()
                 for file in files:
