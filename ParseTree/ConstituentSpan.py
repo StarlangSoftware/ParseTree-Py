@@ -3,20 +3,23 @@ from ParseTree.Symbol import Symbol
 
 class ConstituentSpan:
 
-    constituent: Symbol
-    start: int
-    end: int
+    __constituent: Symbol
+    __start: int
+    __end: int
 
-    def __init__(self, constituent: Symbol, start: int, end: int):
-        self.constituent = constituent
-        self.start = start
-        self.end = end
+    def __init__(self,
+                 constituent: Symbol,
+                 start: int,
+                 end: int):
+        self.__constituent = constituent
+        self.__start = start
+        self.__end = end
 
     def getStart(self) -> int:
-        return self.start
+        return self.__start
 
     def getEnd(self) -> int:
-        return self.end
+        return self.__end
 
     def getConstituent(self) -> Symbol:
-        return self.constituent
+        return self.__constituent

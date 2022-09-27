@@ -7,7 +7,7 @@ from ParseTree.ParseNode import ParseNode
 
 class ParseTree:
 
-    sentenceLabels = ["SINV", "SBARQ", "SBAR", "SQ", "S"]
+    sentence_labels = ["SINV", "SBARQ", "SBAR", "SQ", "S"]
     root: ParseNode
     name: str
 
@@ -24,14 +24,14 @@ class ParseTree:
             self.root = rootOrFileName
         elif isinstance(rootOrFileName, str):
             self.name = os.path.split(rootOrFileName)[1]
-            inputFile = open(rootOrFileName, "r", encoding="utf8")
-            line = inputFile.readline()
+            input_file = open(rootOrFileName, "r", encoding="utf8")
+            line = input_file.readline()
             if "(" in line and ")" in line:
                 line = line[line.index("(") + 1:line.rindex(")")].strip()
                 self.root = ParseNode(None, line, False)
             else:
                 self.root = None
-            inputFile.close()
+            input_file.close()
 
     def nextLeafNode(self, parseNode: ParseNode) -> ParseNode:
         """
@@ -47,11 +47,11 @@ class ParseTree:
         ParseNode
             Next leaf node after the given leaf node.
         """
-        nodeCollector = NodeCollector(self.root, IsEnglishLeaf())
-        leafList = nodeCollector.collect()
-        for i in range(len(leafList) - 1):
-            if leafList[i] == parseNode:
-                return leafList[i + 1]
+        node_collector = NodeCollector(self.root, IsEnglishLeaf())
+        leaf_list = node_collector.collect()
+        for i in range(len(leaf_list) - 1):
+            if leaf_list[i] == parseNode:
+                return leaf_list[i + 1]
         return None
 
     def previousLeafNode(self, parseNode: ParseNode) -> ParseNode:
@@ -68,11 +68,11 @@ class ParseTree:
         ParseNode
             Previous leaf node before the given leaf node.
         """
-        nodeCollector = NodeCollector(self.root, IsEnglishLeaf())
-        leafList = nodeCollector.collect()
-        for i in range(1, len(leafList)):
-            if leafList[i] == parseNode:
-                return leafList[i - 1]
+        node_collector = NodeCollector(self.root, IsEnglishLeaf())
+        leaf_list = node_collector.collect()
+        for i in range(1, len(leaf_list)):
+            if leaf_list[i] == parseNode:
+                return leaf_list[i - 1]
         return None
 
     def nodeCountWithMultipleChildren(self) -> int:
@@ -115,7 +115,7 @@ class ParseTree:
         return self.root.leafCount()
 
     def isFullSentence(self) -> bool:
-        if self.root is not None and self.root.data.getName() in self.sentenceLabels:
+        if self.root is not None and self.root.data.getName() in self.sentence_labels:
             return True
         return False
 
@@ -128,9 +128,9 @@ class ParseTree:
         fileName : str
             Output file name
         """
-        outputFile = open(fileName, "w", encoding="utf8")
-        outputFile.write("( " + self.__str__() + " )\n")
-        outputFile.close()
+        output_file = open(fileName, "w", encoding="utf8")
+        output_file.write("( " + self.__str__() + " )\n")
+        output_file.close()
 
     def correctParents(self):
         """

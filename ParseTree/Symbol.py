@@ -3,19 +3,19 @@ from Dictionary.Word import Word
 
 
 class Symbol(Word):
-    nonTerminalList = ["ADJP", "ADVP", "CC", "CD", "CONJP", "DT", "EX", "FRAG", "FW", "IN", "INTJ", "JJ", "JJR", "JJS",
+    non_terminal_list = ["ADJP", "ADVP", "CC", "CD", "CONJP", "DT", "EX", "FRAG", "FW", "IN", "INTJ", "JJ", "JJR", "JJS",
                        "LS", "LST", "MD", "NAC", "NN", "NNP", "NNPS", "NNS", "NP", "NX", "PDT", "POS", "PP", "PRN",
                        "PRP", "PRP$", "PRT", "PRT|ADVP", "QP", "RB", "RBR", "RP", "RRC", "S", "SBAR", "SBARQ", "SINV",
                        "SQ", "SYM", "TO", "UCP", "UH", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "VP", "WDT", "WHADJP",
                        "WHADVP", "WHNP", "WP", "WP$", "WRB", "X", "-NONE-"]
 
-    phraseLabels = ["NP", "PP", "ADVP", "ADJP", "CC", "VG"]
+    phrase_labels = ["NP", "PP", "ADVP", "ADJP", "CC", "VG"]
 
-    sentenceLabels = ["SINV", "SBARQ", "SBAR", "SQ", "S"]
+    sentence_labels = ["SINV", "SBARQ", "SBAR", "SQ", "S"]
 
-    verbLabels = ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "VERB"]
+    verb_labels = ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "VERB"]
 
-    VPLabel = "VP"
+    vp_label = "VP"
 
     def __eq__(self, other):
         return self.name == other.name
@@ -40,7 +40,7 @@ class Symbol(Word):
         bool
             True if the symbol is VB, false otherwise.
         """
-        return self.name == self.VPLabel
+        return self.name == self.vp_label
 
     def isTerminal(self) -> bool:
         """
@@ -56,7 +56,7 @@ class Symbol(Word):
                 or self.name == ";" or self.name == "\"" or self.name == "''" or self.name == "'" or self.name == "`" \
                 or self.name == "``" or self.name == "..." or self.name == "-" or self.name == "--":
             return True
-        if self.name in self.nonTerminalList:
+        if self.name in self.non_terminal_list:
             return False
         if self.name == "I" or self.name == "A":
             return True
@@ -74,8 +74,8 @@ class Symbol(Word):
         bool
             True if this symbol can be a chunk label, false otherwise.
         """
-        if Word.isPunctuationSymbol(self.name) or self.name.replace("-.*", "") in self.sentenceLabels or \
-                self.name.replace("-.*", "") in self.phraseLabels:
+        if Word.isPunctuationSymbol(self.name) or self.name.replace("-.*", "") in self.sentence_labels or \
+                self.name.replace("-.*", "") in self.phrase_labels:
             return True
         return False
 
@@ -92,23 +92,23 @@ class Symbol(Word):
         if self.name.startswith("-") or ("-" not in self.name and "=" not in self.name):
             return self
         if "-" in self.name:
-            minusIndex = self.name.index("-")
+            minus_index = self.name.index("-")
         else:
-            minusIndex = -1
+            minus_index = -1
         if "=" in self.name:
-            equalIndex = self.name.index("=")
+            equal_index = self.name.index("=")
         else:
-            equalIndex = -1
-        if minusIndex != -1 or equalIndex != -1:
-            if minusIndex != -1 and equalIndex != -1:
-                if minusIndex < equalIndex:
-                    return Symbol(self.name[:minusIndex])
+            equal_index = -1
+        if minus_index != -1 or equal_index != -1:
+            if minus_index != -1 and equal_index != -1:
+                if minus_index < equal_index:
+                    return Symbol(self.name[:minus_index])
                 else:
-                    return Symbol(self.name[:equalIndex])
+                    return Symbol(self.name[:equal_index])
             else:
-                if minusIndex != -1:
-                    return Symbol(self.name[:minusIndex])
+                if minus_index != -1:
+                    return Symbol(self.name[:minus_index])
                 else:
-                    return Symbol(self.name[:equalIndex])
+                    return Symbol(self.name[:equal_index])
         else:
             return self

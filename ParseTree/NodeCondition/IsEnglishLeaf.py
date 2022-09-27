@@ -20,8 +20,8 @@ class IsEnglishLeaf(IsLeaf):
         """
         if super().satisfies(parseNode):
             data = parseNode.getData().getName()
-            parentData = parseNode.getParent().getData().getName()
-            if "*" in data or (data == "0" and parentData == "-NONE-"):
+            parent_data = parseNode.getParent().getData().getName()
+            if "*" in data or (data == "0" and parent_data == "-NONE-"):
                 return False
             return True
         return False

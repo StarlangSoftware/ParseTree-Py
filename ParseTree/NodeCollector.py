@@ -4,10 +4,12 @@ from ParseTree.ParseNode import ParseNode
 
 class NodeCollector:
 
-    condition: NodeCondition
-    rootNode: ParseNode
+    __condition: NodeCondition
+    __root_node: ParseNode
 
-    def __init__(self, rootNode: ParseNode, condition: NodeCondition):
+    def __init__(self,
+                 rootNode: ParseNode,
+                 condition: NodeCondition):
         """
         Constructor for the NodeCollector class. NodeCollector's main aim is to collect a set of ParseNode's from a
         subtree rooted at rootNode, where the ParseNode's satisfy a given NodeCondition, which is implemented by other
@@ -20,10 +22,12 @@ class NodeCollector:
         condition : NodeCondition
             The condition interface for which all nodes in the subtree rooted at rootNode will be checked
         """
-        self.rootNode = rootNode
-        self.condition = condition
+        self.__root_node = rootNode
+        self.__condition = condition
 
-    def __collectNodes(self, parseNode: ParseNode, collected: list):
+    def __collectNodes(self,
+                       parseNode: ParseNode,
+                       collected: list):
         """
         Private recursive method to check all descendants of the parseNode, if they ever satisfy the given node
         condition
@@ -35,7 +39,7 @@ class NodeCollector:
         collected : list
             The list where the collected ParseNode's will be stored.
         """
-        if self.condition is None or self.condition.satisfies(parseNode):
+        if self.__condition is None or self.__condition.satisfies(parseNode):
             collected.append(parseNode)
         for child in parseNode.children:
             self.__collectNodes(child, collected)
@@ -50,5 +54,5 @@ class NodeCollector:
             All ParseNode's satisfying the node condition.
         """
         result = []
-        self.__collectNodes(self.rootNode, result)
+        self.__collectNodes(self.__root_node, result)
         return result

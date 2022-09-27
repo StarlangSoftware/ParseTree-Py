@@ -43,7 +43,10 @@ class ParseNode:
     NP4 = ["CD"]
     NP5 = ["JJ", "JJS", "RB", "QP"]
 
-    def __init__(self, dataOrParent, leftOrLine=None, rightOrIsLeaf=None):
+    def __init__(self,
+                 dataOrParent,
+                 leftOrLine=None,
+                 rightOrIsLeaf=None):
         """
         Another simple constructor for ParseNode. It takes inputs left and right children of this node, and the data.
         Sets the corresponding attributes with these inputs.
@@ -73,29 +76,35 @@ class ParseNode:
                     self.children.append(leftOrLine)
                     leftOrLine.parent = self
         elif (isinstance(dataOrParent, ParseNode) or dataOrParent is None) and isinstance(leftOrLine, str) and isinstance(rightOrIsLeaf, bool):
-            parenthesisCount = 0
-            childLine = ""
+            parenthesis_count = 0
+            child_line = ""
             self.parent = dataOrParent
             if rightOrIsLeaf:
                 self.data = Symbol(leftOrLine)
             else:
                 self.data = Symbol(leftOrLine[1: leftOrLine.index(" ")])
                 if leftOrLine.index(")") == leftOrLine.rindex(")"):
-                    self.children.append(ParseNode(self, leftOrLine[leftOrLine.index(" ") + 1: leftOrLine.index(")")],
-                                                   True))
+                    self.children.append(ParseNode(dataOrParent=self,
+                                                   leftOrLine=leftOrLine[leftOrLine.index(" ") + 1: leftOrLine.index(")")],
+                                                   rightOrIsLeaf=True))
                 else:
                     for i in range(leftOrLine.index(" ") + 1, len(leftOrLine)):
-                        if leftOrLine[i] != " " or parenthesisCount > 0:
-                            childLine = childLine + leftOrLine[i]
+                        if leftOrLine[i] != " " or parenthesis_count > 0:
+                            child_line = child_line + leftOrLine[i]
                         if leftOrLine[i] == "(":
-                            parenthesisCount = parenthesisCount + 1
+                            parenthesis_count = parenthesis_count + 1
                         elif leftOrLine[i] == ")":
-                            parenthesisCount = parenthesisCount - 1
-                        if parenthesisCount == 0 and len(childLine) != 0:
-                            self.children.append(ParseNode(self, childLine.strip(), False))
-                            childLine = ""
+                            parenthesis_count = parenthesis_count - 1
+                        if parenthesis_count == 0 and len(child_line) != 0:
+                            self.children.append(ParseNode(dataOrParent=self,
+                                                           leftOrLine=child_line.strip(),
+                                                           rightOrIsLeaf=False))
+                            child_line = ""
 
-    def __searchHeadChild(self, priorityList: list, direction: SearchDirectionType, defaultCase: bool) -> ParseNode:
+    def __searchHeadChild(self,
+                          priorityList: list,
+                          direction: SearchDirectionType,
+                          defaultCase: bool) -> ParseNode:
         """
         Extracts the head of the children of this current node.
 
@@ -235,7 +244,9 @@ class ParseNode:
                                     return self.lastChild()
         return None
 
-    def addChild(self, child: ParseNode, index=None):
+    def addChild(self,
+                 child: ParseNode,
+                 index=None):
         """
         Adds a child node at the end of the children node list.
 
@@ -275,7 +286,9 @@ class ParseNode:
         for child in self.children:
             child.removeXNodes()
 
-    def setChild(self, index: int, child: ParseNode):
+    def setChild(self,
+                 index: int,
+                 child: ParseNode):
         """
         Replaces a child node at the given specific with a new child node.
 
@@ -652,7 +665,9 @@ class ParseNode:
         else:
             return self.parent.ancestorString() + self.data.getName()
 
-    def constituentSpanList(self, startIndex: int, constituentSpanList: list):
+    def constituentSpanList(self,
+                            startIndex: int,
+                            constituentSpanList: list):
         """
         Construct recursively the constituent span list of a subtree rooted at this node.
 
