@@ -6,7 +6,7 @@ from ParseTree.ParseTree import ParseTree
 
 class TreeBank:
 
-    __parse_trees: list
+    parse_trees: list
 
     def __init__(self,
                  folder: str = None,
@@ -23,7 +23,7 @@ class TreeBank:
         pattern : str
             File pattern such as "." ".train" ".test".
         """
-        self.__parse_trees = []
+        self.parse_trees = []
         if folder is not None:
             for root, dirs, files in os.walk(folder):
                 files.sort()
@@ -31,7 +31,7 @@ class TreeBank:
                     file_name = os.path.join(root, file)
                     if (pattern is None or pattern in file_name) and re.match("\\d+\\.", file):
                         parseTree = ParseTree(file_name)
-                        self.__parse_trees.append(parseTree)
+                        self.parse_trees.append(parseTree)
 
     def size(self) -> int:
         """
@@ -42,7 +42,7 @@ class TreeBank:
         int
             Number of trees in the TreeBank.
         """
-        return len(self.__parse_trees)
+        return len(self.parse_trees)
 
     def wordCount(self, excludeStopWords: bool) -> int:
         """
@@ -60,7 +60,7 @@ class TreeBank:
             Number of all words in all parseTrees in the TreeBank.
         """
         total = 0
-        for tree in self.__parse_trees:
+        for tree in self.parse_trees:
             total += tree.wordCount(excludeStopWords)
         return total
 
@@ -78,7 +78,7 @@ class TreeBank:
         ParseTree
             The ParseTree at the given index.
         """
-        return self.__parse_trees[index]
+        return self.parse_trees[index]
 
     def removeTree(self, i):
-        self.__parse_trees.pop(i)
+        self.parse_trees.pop(i)
