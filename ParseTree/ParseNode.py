@@ -43,6 +43,71 @@ class ParseNode:
     NP4 = ["CD"]
     NP5 = ["JJ", "JJS", "RB", "QP"]
 
+    def constructor1(self, data: Symbol, left: ParseNode, right: ParseNode):
+        """
+        Another simple constructor for ParseNode. It takes inputs left and right children of this node, and the data.
+        Sets the corresponding attributes with these inputs.
+        :param data: Data for this node.
+        :param left: Left child of this node.
+        :param right: Right child of this node.
+        """
+        self.data = data
+        self.children.append(left)
+        left.parent = self
+        self.children.append(right)
+        right.parent = self
+
+    def constructor2(self, data: Symbol, left: ParseNode):
+        """
+        Another simple constructor for ParseNode. It takes inputs left child of this node and the data.
+        Sets the corresponding attributes with these inputs.
+        :param data: Data for this node.
+        :param left: Left child of this node.
+        """
+        self.data = data
+        self.children.append(left)
+        left.parent = self
+
+    def constructor3(self, data: Symbol):
+        """
+        Another simple constructor for ParseNode. It only can take input the data, and sets it.
+        :param data: Data for this node.
+        """
+        self.data = data
+
+    def constructor4(self, parent: ParseNode, line: str, isLeaf: bool):
+        """
+        Constructs a ParseNode from a single line. If the node is a leaf node, it only sets the data. Otherwise, splits
+        the line w.r.t. spaces and paranthesis and calls itself resursively to generate its child parseNodes.
+        :param parent: The parent node of this node.
+        :param line: The input line to create this parseNode.
+        :param isLeaf: True, if this node is a leaf node; false otherwise.
+        """
+        parenthesis_count = 0
+        child_line = ""
+        self.parent = parent
+        if isLeaf:
+            self.data = Symbol(line)
+        else:
+            self.data = Symbol(line[1: line.index(" ")])
+            if line.index(")") == line.rindex(")"):
+                self.children.append(ParseNode(dataOrParent=self,
+                                               leftOrLine=line[line.index(" ") + 1: line.index(")")],
+                                               rightOrIsLeaf=True))
+            else:
+                for i in range(line.index(" ") + 1, len(line)):
+                    if line[i] != " " or parenthesis_count > 0:
+                        child_line = child_line + line[i]
+                    if line[i] == "(":
+                        parenthesis_count = parenthesis_count + 1
+                    elif line[i] == ")":
+                        parenthesis_count = parenthesis_count - 1
+                    if parenthesis_count == 0 and len(child_line) != 0:
+                        self.children.append(ParseNode(dataOrParent=self,
+                                                       leftOrLine=child_line.strip(),
+                                                       rightOrIsLeaf=False))
+                        child_line = ""
+
     def __init__(self,
                  dataOrParent,
                  leftOrLine=None,
@@ -65,41 +130,15 @@ class ParseNode:
         self.data = None
         if isinstance(dataOrParent, Symbol) and isinstance(leftOrLine, ParseNode) and isinstance(rightOrIsLeaf,
                                                                                                  ParseNode):
-            self.data = dataOrParent
             if rightOrIsLeaf is not None:
-                self.children.append(leftOrLine)
-                leftOrLine.parent = self
-                self.children.append(rightOrIsLeaf)
-                rightOrIsLeaf.parent = self
+                self.constructor1(dataOrParent, leftOrLine, rightOrIsLeaf)
             else:
                 if leftOrLine is not None:
-                    self.children.append(leftOrLine)
-                    leftOrLine.parent = self
-        elif (isinstance(dataOrParent, ParseNode) or dataOrParent is None) and isinstance(leftOrLine, str) and isinstance(rightOrIsLeaf, bool):
-            parenthesis_count = 0
-            child_line = ""
-            self.parent = dataOrParent
-            if rightOrIsLeaf:
-                self.data = Symbol(leftOrLine)
-            else:
-                self.data = Symbol(leftOrLine[1: leftOrLine.index(" ")])
-                if leftOrLine.index(")") == leftOrLine.rindex(")"):
-                    self.children.append(ParseNode(dataOrParent=self,
-                                                   leftOrLine=leftOrLine[leftOrLine.index(" ") + 1: leftOrLine.index(")")],
-                                                   rightOrIsLeaf=True))
+                    self.constructor2(dataOrParent, leftOrLine)
                 else:
-                    for i in range(leftOrLine.index(" ") + 1, len(leftOrLine)):
-                        if leftOrLine[i] != " " or parenthesis_count > 0:
-                            child_line = child_line + leftOrLine[i]
-                        if leftOrLine[i] == "(":
-                            parenthesis_count = parenthesis_count + 1
-                        elif leftOrLine[i] == ")":
-                            parenthesis_count = parenthesis_count - 1
-                        if parenthesis_count == 0 and len(child_line) != 0:
-                            self.children.append(ParseNode(dataOrParent=self,
-                                                           leftOrLine=child_line.strip(),
-                                                           rightOrIsLeaf=False))
-                            child_line = ""
+                    self.constructor3(dataOrParent)
+        elif (isinstance(dataOrParent, ParseNode) or dataOrParent is None) and isinstance(leftOrLine, str) and isinstance(rightOrIsLeaf, bool):
+            self.constructor4(dataOrParent, leftOrLine, rightOrIsLeaf)
 
     def __searchHeadChild(self,
                           priorityList: list,

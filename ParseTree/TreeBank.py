@@ -81,4 +81,8 @@ class TreeBank:
         return self.parse_trees[index]
 
     def removeTree(self, i):
+        """
+        Removes the parse tree at position index from the treebank.
+        :param i: Position of the tree in the treebank.
+        """
         self.parse_trees.pop(i)

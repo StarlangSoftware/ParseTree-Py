@@ -11,6 +11,29 @@ class ParseTree:
     root: ParseNode
     name: str
 
+    def constructor1(self, root: ParseNode):
+        """
+        Basic constructor for a ParseTree. Initializes the root node with the input.
+        :param root: Root node of the tree
+        """
+        self.root = root
+
+    def constructor2(self, fileName: str):
+        """
+        Another constructor of the ParseTree. The method takes the file containing a single line as input and constructs
+        the whole tree by calling the ParseNode constructor recursively.
+        :param fileName: File containing a single line for a ParseTree
+        """
+        self.name = os.path.split(fileName)[1]
+        input_file = open(fileName, "r", encoding="utf8")
+        line = input_file.readline()
+        if "(" in line and ")" in line:
+            line = line[line.index("(") + 1:line.rindex(")")].strip()
+            self.root = ParseNode(None, line, False)
+        else:
+            self.root = None
+        input_file.close()
+
     def __init__(self, rootOrFileName=None):
         """
         Basic constructor for a ParseTree. Initializes the root node with the input.
@@ -21,17 +44,9 @@ class ParseTree:
             Root node of the tree
         """
         if isinstance(rootOrFileName, ParseNode):
-            self.root = rootOrFileName
+            self.constructor1(rootOrFileName)
         elif isinstance(rootOrFileName, str):
-            self.name = os.path.split(rootOrFileName)[1]
-            input_file = open(rootOrFileName, "r", encoding="utf8")
-            line = input_file.readline()
-            if "(" in line and ")" in line:
-                line = line[line.index("(") + 1:line.rindex(")")].strip()
-                self.root = ParseNode(None, line, False)
-            else:
-                self.root = None
-            input_file.close()
+            self.constructor2(rootOrFileName)
 
     def nextLeafNode(self, parseNode: ParseNode) -> ParseNode:
         """
@@ -87,9 +102,17 @@ class ParseTree:
         return self.root.nodeCountWithMultipleChildren()
 
     def setName(self, name: str):
+        """
+        Mutator for the name attribute.
+        :param name: Name of the parse tree.
+        """
         self.name = name
 
     def getName(self) -> str:
+        """
+        Accessor for the name attribute.
+        :return: Name of the parse tree.
+        """
         return self.name
 
     def nodeCount(self) -> int:
