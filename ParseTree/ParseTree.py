@@ -138,6 +138,10 @@ class ParseTree:
         return self.root.leafCount()
 
     def isFullSentence(self) -> bool:
+        """
+        Checks if the sentence is a full sentence or not. A sentence is a full sentence is its root tag is S, SINV, etc.
+        :return: True if the sentence is a full sentence, false otherwise.
+        """
         if self.root is not None and self.root.data.getName() in self.sentence_labels:
             return True
         return False
